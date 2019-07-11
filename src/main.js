@@ -1,12 +1,10 @@
-// to store current url
-window.location.href
 
 class Data {
     constructor () {
-        this.domain = window.location.href,
-        this.time = 0,
-        this.visits = null,
-        this.extendedDomains = null
+        this.domain = document.domain,
+        this.time = Date.now(),
+        this.visits = 1,
+        this.url = window.location.href
     }
 
     
@@ -26,9 +24,22 @@ function setLocal(name){
 // keep for set
 // chrome.storage.local.set({"data":[]});
 
+
 window.onload = chrome.storage.local.get(['data'], function(domain){
   console.log(domain);
   console.log(Array.isArray(domain.data));
+  
+  let visitCount = 1;
+  for(let item of domain.data){
+    // console.log(domain.data)
+    if(item.domain === document.domain){
+      // console.log(item.domain === window.location.href);
+      // console.log(window.location.href);
+      visitCount++;
+      // console.log(visitCount)
+    }
+  }
+  pickles.visits = visitCount;
   domain.data.push(pickles)
   update = domain.data;
   window.onload = chrome.storage.local.set({"data":update});
