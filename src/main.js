@@ -39,15 +39,20 @@ window.onload = () => {
   )
 }
 */
-function resetData(){
-  chrome.storage.local.set({"data":[]}, ()=>{console.log("reset hit")});
-  chrome.storage.local.set({"lastReset": `${new Date()}`});
-}
-let resetButton = document.createElement("BUTTON");
-let buttonText = document.createTextNode("Reset");
-resetButton.addEventListener("click", resetData); 
-resetButton.appendChild(buttonText);
-window.onload = document.body.appendChild(resetButton);
+// chrome.storage.local.set({"data":[]}, ()=>{console.log("reset hit")});
+  // chrome.storage.local.set({"lastReset": `${new Date()}`});
+
+
+window.onload = () => {
+  function resetData(){
+    console.log("hi")
+  }
+  let resetButton = document.createElement("BUTTON");
+  let buttonText = document.createTextNode("Reset");
+  resetButton.addEventListener("click", resetData); 
+  resetButton.appendChild(buttonText);
+  document.body.appendChild(resetButton);
+}  
 
 window.onload = chrome.storage.local.get(['data'], function(domain){
   console.log(domain);
