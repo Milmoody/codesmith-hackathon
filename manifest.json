@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "name": "GrapHistory",
+    "version": "0.1",
+    "permissions": [
+        "storage",
+        "unlimitedStorage"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["src/main.js"]
+        }
+    ]
+}
