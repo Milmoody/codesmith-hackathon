@@ -39,6 +39,7 @@ window.onload = () => {
   )
 }
 */
+<<<<<<< HEAD
 // chrome.storage.local.set({"data":[]}, ()=>{console.log("reset hit")});
   // chrome.storage.local.set({"lastReset": `${new Date()}`});
 
@@ -53,6 +54,20 @@ window.onload = () => {
   resetButton.appendChild(buttonText);
   document.body.appendChild(resetButton);
 }  
+=======
+
+
+
+// chrome.storage.local.set({"data":[]})
+function resetData(){
+  chrome.storage.local.set({"data":[]}, ()=>{console.log("reset hit")});
+  chrome.storage.local.set({"lastReset": `${new Date()}`});
+}
+let resetButton = document.createElement("BUTTON");
+let buttonText = document.createTextNode("Reset");
+resetButton.addEventListener("click", resetData); 
+resetButton.appendChild(buttonText);
+>>>>>>> 84bd7199ef2ea1755a47b93b05bc9609071d0c48
 
 window.onload = chrome.storage.local.get(['data'], function(domain){
   console.log(domain);
@@ -65,9 +80,12 @@ window.onload = chrome.storage.local.get(['data'], function(domain){
     }
   }
   pickles.visits = visitCount;
-
+  
   //adding domain element, excluding popup domain
-  if(document.domain === "eimgppkmnopgdadgbffgccnflanmjonh"){
+  if(document.domain === "fniinplphnaobhbaobohdlgbhkkpgnaj"){
+    const button = document.getElementById('reset');
+    console.log("inside the popup");
+    console.log(button);
     const domainEl = document.createElement("p");
     domainEl.textContent = domain.data[domain.data.length - 1].domain;
     const popup = document.getElementById('popup');
@@ -76,9 +94,10 @@ window.onload = chrome.storage.local.get(['data'], function(domain){
     const visits = document.getElementById('visits');
     visitsEl.textContent = domain.data[domain.data.length - 1].visits;
     visits.appendChild(visitsEl);
+    document.body.appendChild(resetButton);
   }
   //if current domain isn't popup, push domain info to data
-  if(document.domain !== "eimgppkmnopgdadgbffgccnflanmjonh"){
+  if(document.domain !== "fniinplphnaobhbaobohdlgbhkkpgnaj"){
     domain.data.push(pickles)
     update = domain.data;
     window.onload = chrome.storage.local.set({"data":update});
