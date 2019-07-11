@@ -12,7 +12,10 @@ class Data {
     
 }
 
-chrome.storage.local.set({"domain": "Example Domain"});
+chrome.storage.local.set({"domain": new Data()});
+chrome.storage.local.get(["domain"], function(domain){
+  console.log(domain)
+});
 
 let testEntry = new Data();
 console.log(testEntry);
