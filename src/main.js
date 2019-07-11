@@ -11,19 +11,43 @@ class Data {
 }
 const pickles = new Data();
 var test = pickles.domain.href;
+let domainText = JSON.stringify(pickles.domain)
 let update;
-// also not working
 /*
-function setLocal(name){
-  chrome.storage.local.set(name);
+// test reset
+console.log(document.getElementById("reset"));
+document.getElementById("reset").addEventListener("click", function() {
+  chrome.storage.local.set(
+  {
+  "data":[],
+  "lastReset": `${new Date()}`
+  }
+  )
+})
+// keep for set
+window.onload = () => {
+  let resetButton = document.getElementById("#reset");
+  console.log(resetButton);
+  resetButton.addEventListener("click", function() {
+    chrome.storage.local.set(
+    {
+    "data":[],
+    "lastReset": `${new Date()}`
+    }
+    )
+  }
+  )
 }
 */
-
-// window.onload = setLocal(pickles);
-
-// keep for set
-// chrome.storage.local.set({"data":[]});
-
+function resetData(){
+  chrome.storage.local.set({"data":[]}, ()=>{console.log("reset hit")});
+  chrome.storage.local.set({"lastReset": `${new Date()}`});
+}
+let resetButton = document.createElement("BUTTON");
+let buttonText = document.createTextNode("Reset");
+resetButton.addEventListener("click", resetData); 
+resetButton.appendChild(buttonText);
+window.onload = document.body.appendChild(resetButton);
 
 window.onload = chrome.storage.local.get(['data'], function(domain){
   console.log(domain);
@@ -31,34 +55,37 @@ window.onload = chrome.storage.local.get(['data'], function(domain){
   
   let visitCount = 1;
   for(let item of domain.data){
-    // console.log(domain.data)
     if(item.domain === document.domain){
-      // console.log(item.domain === window.location.href);
-      // console.log(window.location.href);
       visitCount++;
-      // console.log(visitCount)
     }
   }
   pickles.visits = visitCount;
-  domain.data.push(pickles)
-  update = domain.data;
-  window.onload = chrome.storage.local.set({"data":update});
+
+  //adding domain element, excluding popup domain
+  if(document.domain === "eimgppkmnopgdadgbffgccnflanmjonh"){
+    const domainEl = document.createElement("p");
+    domainEl.textContent = domain.data[domain.data.length - 1].domain;
+    const popup = document.getElementById('popup');
+    popup.appendChild(domainEl);
+    const visitsEl = document.createElement("p");
+    const visits = document.getElementById('visits');
+    visitsEl.textContent = domain.data[domain.data.length - 1].visits;
+    visits.appendChild(visitsEl);
+  }
+  //if current domain isn't popup, push domain info to data
+  if(document.domain !== "eimgppkmnopgdadgbffgccnflanmjonh"){
+    domain.data.push(pickles)
+    update = domain.data;
+    window.onload = chrome.storage.local.set({"data":update});
+  }
+  
 });
 
 
-// outdated beginning code
-/*
-//get data from JSON file with XML HTTP Request
-let getData = new XMLHttpRequest();
-getData.open('GET', '/history/data.json', true);
-
-getData.onload = function () {
-    // Convert JSON data to an object
-    let data = JSON.parse(this.response);
-  let output = '';
-    
-}
-
-  getData.send();
-  console.log(getData)
-*/
+// window.onload = () => {
+//   const domainEl = document.createElement("p");
+//   domainEl.textContent = domainText;
+//   // console.log(Data.domain)
+//   const popup = document.getElementById('popup');
+//   popup.appendChild(domainEl);
+// }
